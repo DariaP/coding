@@ -114,6 +114,7 @@ test('it throws exception if not an array', function(t) {
     zeroMatrix(12);
   }
   t.throws(call, "Invalid input (array of arrays expected)");
+  t.end();
 });
 
 test('it throws exception if not an array of arrays', function(t) {
@@ -121,6 +122,7 @@ test('it throws exception if not an array of arrays', function(t) {
     zeroMatrix([1, 2, 3]);
   }
   t.throws(call, "Invalid input (array of arrays expected)");
+  t.end();
 });
 
 test('it throws exception if arrays are not of the same length', function(t) {
@@ -128,4 +130,5 @@ test('it throws exception if arrays are not of the same length', function(t) {
     zeroMatrix([[1, 2, 3], [4, 5, 6], [7, 8]]);
   }
   t.throws(call, "Invalid input (arrays of the same length expected)");
+  t.end();
 });

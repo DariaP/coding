@@ -1,14 +1,15 @@
 
 
 function zeroMatrix(matrix) {
-  var cols = [], rows = [];
 
   if(Object.prototype.toString.call(matrix) !== '[object Array]') {
     throw "Invalid input (array of arrays expected)";
   }
 
-  findZeroColsAndRows();
-  setZeros();
+  if(matrix.length > 0) {
+    findZeroColsAndRows();
+    setZeros();
+  }
 
   function findZeroColsAndRows() {
     for (var i = 0 ; i < matrix.length ; ++i) {
@@ -25,8 +26,8 @@ function zeroMatrix(matrix) {
 
       for (var j = 0 ; j < row.length ; ++j) {
         if (row[j] === 0) {
-          cols[j] = true;
-          rows[i] = true;
+          matrix[0][j] = 0;
+          matrix[i][0] = 0;
         }
       }
     }
@@ -35,14 +36,14 @@ function zeroMatrix(matrix) {
   function setZeros() {
     var i;
 
-    for (i = 0 ; i < cols.length ; ++i) {
-      if (cols[i]) {
+    for (i = 0 ; i < matrix[0].length ; ++i) {
+      if (matrix[0][i] === 0) {
         fillColWithZeros(i);
       }
     }
 
-    for (i = 0 ; i < rows.length ; ++i) {
-      if (cols[i]) {
+    for (i = 0 ; i < matrix.length ; ++i) {
+      if (matrix[i][0] === 0) {
         fillRowWithZeros(i);
       }
     }
