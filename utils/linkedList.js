@@ -1,6 +1,12 @@
-function singlyLinkedList() {
+function singlyLinkedList(values) {
   var head = null,
       tail = null;
+
+  if(values) {
+    values.forEach(function(value) {
+      add(value);
+    });
+  }
 
   function forEach(callback) {
     for (var nextNode = head ; nextNode != null ; nextNode = nextNode.next()) {
@@ -16,18 +22,20 @@ function singlyLinkedList() {
     return array;
   }
 
+  function add(value) {
+    var newNode = node(value);
+    if (head) {
+      tail.setNext(newNode);
+    } else {
+      head = newNode;
+    }
+
+    tail = newNode;
+  }
+
   return {
 
-    add: function(value) {
-      var newNode = node(value);
-      if (head) {
-        tail.setNext(newNode);
-      } else {
-        head = newNode;
-      }
-
-      tail = newNode;
-    },
+    add: add,
 
     deleteNext: function(prevNode) {
       if (prevNode.next()) {
@@ -41,6 +49,23 @@ function singlyLinkedList() {
       return toArray().map(function(node) {
         return node.value();
       }).join();
+    },
+
+    iterator: function() {
+      var nextNode = head;
+      return {
+        next: function() {
+          var value = null;
+          if (nextNode) {
+            value = nextNode.value();
+            nextNode = nextNode.next();
+          }
+          return value;
+        },
+        hasNext: function() {
+          return (nextNode !== null);
+        }
+      }
     }
   }
 
