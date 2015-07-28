@@ -1,72 +1,127 @@
 function singlyLinkedList(values) {
   var head = null,
-      tail = null;
+      tail = null,
+      _size = 0;
 
   if(values) {
+    initFromArray(values);
+  }
+
+
+
+  function initFromArray(values) {
     values.forEach(function(value) {
       add(value);
     });
   }
 
-  function forEach(callback) {
+  function forEachNode(callback) {
     for (var nextNode = head ; nextNode != null ; nextNode = nextNode.next()) {
       callback(nextNode);
     }
   }
 
+  function forEach(callback) {
+    forEachNode(function(node) {
+      callback(node.value());
+    });
+  }
+
   function toArray() {
     var array = [];
-    forEach(function(node) {
-      array.push(node);
+    forEach(function(value) {
+      array.push(value);
     });
     return array;
   }
 
   function add(value) {
     var newNode = node(value);
+    addNode(newNode);
+  }
+
+  function addNode(newNode) {
+    _size++;
     if (head) {
       tail.setNext(newNode);
     } else {
       head = newNode;
     }
-
     tail = newNode;
   }
 
-  return {
+  function toString() {
+    return toArray().join();
+  }
 
-    add: add,
-
-    deleteNext: function(prevNode) {
-      if (prevNode.next()) {
-        prevNode.setNext(prevNode.next().next());
+  function iterator() {
+    var nextNode = head;
+    return {
+      next: function() {
+        var value = null;
+        if (nextNode) {
+          value = nextNode.value();
+          nextNode = nextNode.next();
+        }
+        return value;
+      },
+      hasNext: function() {
+        return (nextNode !== null);
       }
-    },
+    }
+  }
+
+  function nodeIterator(startNode) {
+    var nextNode = startNode ? startNode : head;
+    return {
+      next: function() {
+        var prevNode = null;
+        if (nextNode) {
+          prevNode = nextNode;
+          nextNode = nextNode.next();
+        }
+        return prevNode;
+      },
+      hasNext: function() {
+        return (nextNode !== null);
+      }
+    }
+  }
+
+  function deleteNext(prevNode) {
+    _size--;
+    if (prevNode.next()) {
+      prevNode.setNext(prevNode.next().next());
+    }
+  }
+
+  function deleteHead() {
+    if(tail === head) {
+      tail = null;
+      head = null;
+    } else {
+      head = head.next();
+    }
+  }
+
+
+  return {
+    add: add,
+    addNode: addNode,
+    node: node,
+
+    deleteNext: deleteNext,
+    deleteHead: deleteHead,
 
     forEach: forEach,
 
-    toString: function() {
-      return toArray().map(function(node) {
-        return node.value();
-      }).join();
-    },
+    toString: toString,
 
-    iterator: function() {
-      var nextNode = head;
-      return {
-        next: function() {
-          var value = null;
-          if (nextNode) {
-            value = nextNode.value();
-            nextNode = nextNode.next();
-          }
-          return value;
-        },
-        hasNext: function() {
-          return (nextNode !== null);
-        }
-      }
-    }
+    iterator: iterator,
+
+    nodeIterator: nodeIterator,
+
+    size: function() { return _size; }
   }
 
 }
@@ -87,6 +142,8 @@ function node(_value) {
     }
   };
 }
+
+singlyLinkedList.node = node;
 
 module.exports = {
   singlyLinkedList: singlyLinkedList
