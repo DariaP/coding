@@ -95,6 +95,9 @@ function singlyLinkedList(values) {
       prevNode.setNext(prevNode.next().next());
       deleted.setNext(null);
     }
+    if (deleted === tail) {
+      tail = prevNode;
+    }
     return deleted;
   }
 
@@ -113,8 +116,16 @@ function singlyLinkedList(values) {
   }
 
   function append(list) {
-    tail.setNext(list.getHead());
-    tail = list.getTail();
+    //TODO: if tail is null,  test
+    if (head === null) {
+      head = list.getHead();
+      tail = list.getTail();
+    } else {
+      tail.setNext(list.getHead());
+      if (list.getTail() !== null) {
+        tail = list.getTail();
+      }      
+    }
   }
 
   return {
