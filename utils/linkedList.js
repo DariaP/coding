@@ -90,25 +90,39 @@ function singlyLinkedList(values) {
 
   function deleteNext(prevNode) {
     _size--;
+    var deleted = prevNode.next();
     if (prevNode.next()) {
       prevNode.setNext(prevNode.next().next());
+      deleted.setNext(null);
     }
+    return deleted;
   }
 
   function deleteHead() {
+    var deleted = head;
     if(tail === head) {
       tail = null;
       head = null;
     } else {
       head = head.next();
     }
+    if(deleted) {
+      deleted.setNext(null);
+    }
+    return deleted;
   }
 
+  function append(list) {
+    tail.setNext(list.getHead());
+    tail = list.getTail();
+  }
 
   return {
     add: add,
     addNode: addNode,
     node: node,
+
+    append: append,
 
     deleteNext: deleteNext,
     deleteHead: deleteHead,
@@ -121,7 +135,9 @@ function singlyLinkedList(values) {
 
     nodeIterator: nodeIterator,
 
-    size: function() { return _size; }
+    size: function() { return _size; },
+    getHead: function() { return head; },
+    getTail: function() { return tail; }
   }
 
 }

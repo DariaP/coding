@@ -49,5 +49,10 @@ test('singly linked list', function(t) {
   list3.addNode(linkedLists.singlyLinkedList.node(3));
   t.equals('1,2,3', list3.toString());
 
+  var list4 = linkedLists.singlyLinkedList([1, 2, 3]),
+      list5 = linkedLists.singlyLinkedList([4, 5, 6]);
+  list4.append(list5);
+  t.equals('1,2,3,4,5,6', list4.toString());
+
   t.end();
 });
