@@ -1,12 +1,18 @@
 var linkedLists = require('../linkedList'),
     test = require('tap').test;
 
-test('singly linked list', function(t) {
+test('init from array, toString and add', function(t) {
   var list = linkedLists.singlyLinkedList([1, 2, 3, 4, 5]);
 
   t.equals('1,2,3,4,5', list.toString());
   list.add(6);
   t.equals('1,2,3,4,5,6', list.toString());
+
+  t.end();
+});
+
+test('for each', function(t) {
+  var list = linkedLists.singlyLinkedList([1, 2, 3, 4, 5, 6]);
 
   var i = 1;
   list.forEach(function(value) {
@@ -15,10 +21,16 @@ test('singly linked list', function(t) {
   });
   t.equals(i, 7);
 
-  var iterator = list.iterator(),
-      nextValue;
+  t.end();
+});
 
-  i = 1;
+test('iterator', function(t) {
+  var list = linkedLists.singlyLinkedList([1, 2, 3, 4, 5, 6]);
+
+  var iterator = list.iterator(),
+      nextValue,
+      i = 1;
+
   while (iterator.hasNext()) {
     nextValue = iterator.next();
     t.equals(nextValue, i);
@@ -26,10 +38,16 @@ test('singly linked list', function(t) {
   }
   t.equals(i, 7);
 
-  var nodeIterator = list.nodeIterator(),
-      nextNode;
+  t.end();
+});
 
-  i = 1;
+test('node iterator', function(t) {
+  var list = linkedLists.singlyLinkedList([1, 2, 3, 4, 5, 6]);
+
+  var nodeIterator = list.nodeIterator(),
+      nextNode,
+      i = 1;
+
   while (nodeIterator.hasNext()) {
     nextNode = nodeIterator.next();
     t.equals(nextNode.value(), i);
@@ -37,22 +55,37 @@ test('singly linked list', function(t) {
   }
   t.equals(i, 7);
 
-  var list2 = linkedLists.singlyLinkedList();
-  list2.add(1);
-  list2.add(2);
-  list2.add(3);
-  t.equals('1,2,3', list2.toString());
+  t.end();
+});
 
-  var list3 = linkedLists.singlyLinkedList([]);
-  list3.addNode(linkedLists.singlyLinkedList.node(1));
-  list3.addNode(linkedLists.singlyLinkedList.node(2));
-  list3.addNode(linkedLists.singlyLinkedList.node(3));
-  t.equals('1,2,3', list3.toString());
+test('init and add', function(t) {
 
-  var list4 = linkedLists.singlyLinkedList([1, 2, 3]),
-      list5 = linkedLists.singlyLinkedList([4, 5, 6]);
-  list4.append(list5);
-  t.equals('1,2,3,4,5,6', list4.toString());
+  var list = linkedLists.singlyLinkedList();
+  list.add(1);
+  list.add(2);
+  list.add(3);
+  t.equals('1,2,3', list.toString());
+
+  t.end();
+});
+
+test('init with empty array and add node', function(t) {
+
+  var list = linkedLists.singlyLinkedList([]);
+  list.addNode(linkedLists.singlyLinkedList.node(1));
+  list.addNode(linkedLists.singlyLinkedList.node(2));
+  list.addNode(linkedLists.singlyLinkedList.node(3));
+  t.equals('1,2,3', list.toString());
+
+  t.end();
+});
+
+test('append list', function(t) {
+
+  var list = linkedLists.singlyLinkedList([1, 2, 3]),
+      list2 = linkedLists.singlyLinkedList([4, 5, 6]);
+  list.append(list2);
+  t.equals('1,2,3,4,5,6', list.toString());
 
   t.end();
 });
