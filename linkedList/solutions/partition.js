@@ -20,8 +20,17 @@ function partition(list, middleValue) {
       incPointersPositions();
     }
   }
+  var s1 = equalNodes.toString(),
+      s2 = list.toString(),
+      s3 = biggerNodes.toString();
   list.append(equalNodes);
+s1 = equalNodes.toString();
+      s2 = list.toString();
+      s3 = biggerNodes.toString();
   list.append(biggerNodes);
+s1 = equalNodes.toString();
+      s2 = list.toString();
+      s3 = biggerNodes.toString();
 
   function incPointersPositions() {
     prevNode = nextNode;
