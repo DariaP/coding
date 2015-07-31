@@ -129,3 +129,12 @@ test('it throws an exception if not a median', function(t) {
   t.throws(call, "Empty list");
   t.end();
 })
+
+test('it throws an exception if median is null', function(t) {
+  function call() {
+    var list = singlyLinkedList();
+    deleteMedian(list, null); 
+  }
+  t.throws(call, "Empty list");
+  t.end();
+})
