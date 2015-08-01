@@ -10,6 +10,7 @@ function singlyLinkedList(values) {
 
 
   function initFromArray(values) {
+    size = values.length;
     values.forEach(function(value) {
       add(value);
     });
@@ -89,9 +90,14 @@ function singlyLinkedList(values) {
   }
 
   function deleteNext(prevNode) {
-    _size--;
     var deleted = prevNode.next();
-    if (prevNode.next()) {
+
+    if (!inList(deleted)) {
+      return;
+    }
+
+    if (deleted) {
+      _size--;
       prevNode.setNext(prevNode.next().next());
       deleted.setNext(null);
     }
@@ -110,12 +116,14 @@ function singlyLinkedList(values) {
       head = head.next();
     }
     if(deleted) {
+      _size--;
       deleted.setNext(null);
     }
     return deleted;
   }
 
   function append(list) {
+    _size += list.size();
     //TODO: if tail is null,  test
     if (head === null) {
       head = list.getHead();
@@ -126,6 +134,16 @@ function singlyLinkedList(values) {
         tail = list.getTail();
       }      
     }
+  }
+
+  function inList(node) {
+    var i = nodeIterator();
+    while (i.hasNext()) {
+      if (i.next() === node) {
+        return true;
+      }
+    }
+    return false;
   }
 
   return {

@@ -142,3 +142,50 @@ test('append list', function(t) {
 
   t.end();
 });
+
+test('size', function(t) {
+
+  var list = linkedLists.singlyLinkedList();
+  t.equals(list.size(), 0);
+
+  list.deleteHead();
+  t.equals(list.size(), 0);
+
+  list = linkedLists.singlyLinkedList([]);  
+  t.equals(list.size(), 0);
+
+  list = linkedLists.singlyLinkedList([4]);
+  t.equals(list.size(), 1);
+
+  list.add(2);
+  t.equals(list.size(), 2);
+
+  list = linkedLists.singlyLinkedList([4, 5, 6]);
+  t.equals(list.size(), 3);
+
+  var node = linkedLists.singlyLinkedList.node(1);
+  list.addNode(node);
+  t.equals(list.size(), 4);
+
+  list.deleteHead();
+  t.equals(list.size(), 3);
+
+  list.addNode(linkedLists.singlyLinkedList.node(1));
+  t.equals(list.size(), 4);
+
+  list.deleteNext(node);
+  t.equals(list.size(), 3);
+
+  list.append(linkedLists.singlyLinkedList([7, 8, 9]));
+  t.equals(list.size(), 6);
+
+  list.deleteNext(list.getTail());
+  t.equals(list.size(), 6);
+
+  var someNode = linkedLists.singlyLinkedList.node(1);
+  someNode.setNext(linkedLists.singlyLinkedList.node(2));
+  list.deleteNext(someNode);
+  t.equals(list.size(), 6);
+
+  t.end();
+})
