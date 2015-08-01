@@ -122,6 +122,15 @@ function singlyLinkedList(values) {
     return deleted;
   }
 
+  function addHeadNode(newHead) {
+    newHead.setNext(head);
+    head = newHead;
+    if (tail === null) {
+      tail = newHead;
+    }
+    _size++;
+  }
+
   function append(list) {
     _size += list.size();
     //TODO: if tail is null,  test
@@ -146,10 +155,28 @@ function singlyLinkedList(values) {
     return false;
   }
 
+  function equals(list) {
+
+    if (list.size() !== _size )
+      return false;
+
+    var iterator1 = iterator(),
+        iterator2 = list.iterator();
+
+    while (iterator1.hasNext()) {
+      if (iterator1.next() !== iterator2.next()) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
   return {
     add: add,
     addNode: addNode,
     node: node,
+    addHeadNode: addHeadNode,
 
     append: append,
 
@@ -166,7 +193,9 @@ function singlyLinkedList(values) {
 
     size: function() { return _size; },
     getHead: function() { return head; },
-    getTail: function() { return tail; }
+    getTail: function() { return tail; },
+
+    equals: equals
   }
 
 }

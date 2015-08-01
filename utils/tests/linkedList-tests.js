@@ -187,5 +187,46 @@ test('size', function(t) {
   list.deleteNext(someNode);
   t.equals(list.size(), 6);
 
+  list.addHeadNode(linkedLists.singlyLinkedList.node(1));
+  t.equals(list.size(), 7);
+
   t.end();
+})
+
+test('add head', function(t) {
+  var list = linkedLists.singlyLinkedList();
+
+  list.addHeadNode(linkedLists.singlyLinkedList.node(1))
+  t.equals(list.toString(), '1');
+
+  list.addHeadNode(linkedLists.singlyLinkedList.node(2))
+  t.equals(list.toString(), '2,1');
+
+  list.addHeadNode(linkedLists.singlyLinkedList.node(3))
+  t.equals(list.toString(), '3,2,1');
+})
+
+test('equals', function(t) {
+
+  t.equals(linkedLists.singlyLinkedList().equals(
+           linkedLists.singlyLinkedList()), true);
+
+  t.equals(linkedLists.singlyLinkedList().equals(
+           linkedLists.singlyLinkedList([])), true);
+
+  t.equals(linkedLists.singlyLinkedList([1]).equals(
+           linkedLists.singlyLinkedList([1])), true);
+
+  t.equals(linkedLists.singlyLinkedList([1]).equals(
+           linkedLists.singlyLinkedList([2])), false);
+
+  t.equals(linkedLists.singlyLinkedList([1,2]).equals(
+           linkedLists.singlyLinkedList([2,1])), false);
+
+  t.equals(linkedLists.singlyLinkedList([1,2,3]).equals(
+           linkedLists.singlyLinkedList([1,2,3])), true);
+
+  t.equals(linkedLists.singlyLinkedList([1,2,3]).equals(
+           linkedLists.singlyLinkedList([1,2,3,4])), false);
+
 })
