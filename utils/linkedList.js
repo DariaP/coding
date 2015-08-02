@@ -184,6 +184,7 @@ function singlyLinkedList(values) {
     deleteHead: deleteHead,
 
     forEach: forEach,
+    forEachNode: forEachNode,
 
     toString: toString,
 

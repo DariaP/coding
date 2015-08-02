@@ -5,7 +5,7 @@ function removeDup(list) {
       prevNode = null,
       toDelete = [];
 
-  list.forEach(function(node) {
+  list.forEachNode(function(node) {
     if (values.has(node.value())) {
       // we can depend on the fact that 
       // head is never going to be deleted
