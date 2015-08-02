@@ -1,7 +1,7 @@
 
 function deleteMedian(list, median) {
   var iterator1 = list.nodeIterator(),
-      iterator2 = list.nodeIterator(median),
+      iterator2 = list.nodeIterator({startNode: median}),
       lengthBefore = 0,
       lengthAfter = 0,
       medianFound = false,

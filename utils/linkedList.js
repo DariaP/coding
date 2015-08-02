@@ -72,20 +72,43 @@ function singlyLinkedList(values) {
     }
   }
 
-  function nodeIterator(startNode) {
-    var nextNode = startNode ? startNode : head;
-    return {
-      next: function() {
-        var prevNode = null;
+  function nodeIterator(options) {
+    var nextNode = null,
+        initFlag = true,
+        step = (options && options.step) ? options.step : 1;
+
+    findNext();
+
+    function next() {
+      var prevNode = nextNode;
+      findNext();
+      return prevNode;
+    }
+
+    function makeStep() {
+      if (initFlag) {
+        initFlag = false;
+        nextNode = (options && options.startNode) ? options.startNode : head;
+      } else {
         if (nextNode) {
-          prevNode = nextNode;
           nextNode = nextNode.next();
         }
-        return prevNode;
-      },
-      hasNext: function() {
-        return (nextNode !== null);
       }
+    }
+
+    function findNext() {
+      for (var i = 0 ; i < step ; ++i) {
+        makeStep();
+      }
+    } 
+
+    function hasNext() {
+      return (nextNode !== null);
+    }
+
+    return {
+      next: next,
+      hasNext: hasNext
     }
   }
 

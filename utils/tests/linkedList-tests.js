@@ -58,6 +58,25 @@ test('node iterator', function(t) {
   t.end();
 });
 
+test('node iterator with step', function(t) {
+  var list = linkedLists.singlyLinkedList([1, 2, 3, 4, 5, 6]);
+
+  var nodeIterator = list.nodeIterator({
+        step: 2
+      }),
+      nextNode,
+      i = 2;
+
+  while (nodeIterator.hasNext()) {
+    nextNode = nodeIterator.next();
+    t.equals(nextNode.value(), i);
+    i += 2;
+  }
+  t.equals(i, 8);
+
+  t.end();
+});
+
 test('init and add', function(t) {
 
   var list = linkedLists.singlyLinkedList();
