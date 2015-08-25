@@ -1,5 +1,8 @@
+var binTree = require('./binTree.js')
+
 function tree() {
-  var root = null,
+  var tree = binTree(),
+      root = null,
       heigth = 0;
 
   function insert(node) {
@@ -31,14 +34,6 @@ function tree() {
     }
   }
 
-  function inOrder(node, callback) {
-    if (node) {
-      inOrder(node.left, callback);
-      callback(node);
-      inOrder(node.right, callback);
-    }
-  }
-
   function subtreeHeight(node) {
     if (!node) {
       return 0;
@@ -57,6 +52,7 @@ function tree() {
       var newNode = node(value);
 
       if (!root) {
+        tree.setRoot(newNode);
         root = newNode;
         heigth = 1;
       } else {
@@ -65,11 +61,7 @@ function tree() {
     },
 
     inOrderValues: function() {
-      var values = [];
-      inOrder(root, function(node) {
-        values.push(node.value);
-      });
-      return values;
+      return tree.inOrderValues();
     },
 
     getHeigth: function() {

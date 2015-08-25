@@ -1,4 +1,6 @@
-function binTree(root) {
+function binTree(initRoot) {
+
+  var root = initRoot;
 
   function inOrder(node, callback) {
     if (node) {
@@ -13,6 +15,10 @@ function binTree(root) {
   }
 
   return {
+    setRoot: function(newRoot) {
+      root = newRoot;
+    },
+
     inOrder: function(callback) {
       inOrder(root, callback);
     },
