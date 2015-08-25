@@ -39,6 +39,19 @@ function tree() {
     }
   }
 
+  function subtreeHeight(node) {
+    if (!node) {
+      return 0;
+    } else {
+      var temp = max(subtreeHeight(node.left), subtreeHeight(node.right));
+      return 1 + temp;
+    }
+  }
+
+  function max(a,b) {
+    return (a > b) ? a : b;
+  }
+
   return {
     add: function(value) {
       var newNode = node(value);
@@ -61,6 +74,22 @@ function tree() {
 
     getHeigth: function() {
       return heigth;
+    },
+
+    isBalanced: function() {
+
+      function isBalanced(node) {
+
+        if(!node) {
+          return true;
+        }
+
+        return Math.abs(subtreeHeight(node.left) - subtreeHeight(node.right)) <= 1 && 
+               isBalanced(node.left) && 
+               isBalanced(node.right);
+      }
+
+      return isBalanced(root);
     }
   }
 }
