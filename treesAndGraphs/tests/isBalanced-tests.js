@@ -1,5 +1,5 @@
 var test = require('tap').test,
-    createTree = require('../../utils/tree.js');
+    createTree = require('../../utils/bst.js');
 
 test('it works with perfectly balanced tree', function(t) {
   var tree = createTree();

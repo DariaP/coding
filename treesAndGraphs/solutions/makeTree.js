@@ -1,4 +1,4 @@
-var tree = require('../../utils/tree.js');
+var tree = require('../../utils/bst.js');
 
 function makeTree(array) {
 
