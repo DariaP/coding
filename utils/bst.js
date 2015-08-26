@@ -13,6 +13,7 @@ function tree() {
       if (parentNode.value > node.value) {
         if (parentNode.left === null) {
           parentNode.left = node;
+          node.parent = parentNode;
           break;
         } else {
           parentNode = parentNode.left;
@@ -21,6 +22,7 @@ function tree() {
       } else {
         if (parentNode.right === null) {
           parentNode.right = node;
+          node.parent = parentNode;
           break;
         } else {
           parentNode = parentNode.right;
@@ -58,6 +60,8 @@ function tree() {
       } else {
         insert(newNode);
       }
+
+      return newNode;
     },
 
     inOrderValues: function() {
@@ -90,6 +94,7 @@ function node(value) {
   return {
     left: null,
     right: null,
+    parent: null,
     value: value
   }
 }
