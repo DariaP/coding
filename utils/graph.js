@@ -1,7 +1,7 @@
-function graph(adjList) {
+function graph(adjList, nodesNum) {
 
-  function dfs(startNode, factory, callback) {
-      if(adjList.length === 0) {
+  function bfs(startNode, factory, callback, loopCallback) {
+      if(nodesNum === 0) {
         return;
       }
 
@@ -13,7 +13,12 @@ function graph(adjList) {
             nextNode = factory.getNode(nextElement);
 
         if(visited[nextNode]) {
-          continue;
+          if(loopCallback) {
+            loopCallback();
+            return;
+          } else {
+            continue;            
+          }
         } else {
           visited[nextNode] = true;
         }
@@ -26,7 +31,7 @@ function graph(adjList) {
       }
   }
 
-  function dfsFactory() {
+  function bfsFactory() {
     return {
       initElement: function(startNode) {
         return startNode
@@ -40,7 +45,7 @@ function graph(adjList) {
     }
   }
 
-  function dfsDepthFactory() {
+  function bfsDepthFactory() {
     return {
       initElement: function(startNode) {
         return {
@@ -62,7 +67,7 @@ function graph(adjList) {
     }
   }
 
-  function dfsPathFactory() {
+  function bfsPathFactory() {
     return {
       initElement: function(startNode) {
         return [startNode]
@@ -81,18 +86,63 @@ function graph(adjList) {
     }
   }
 
-  return {
-    dfs: function(startNode, callback) {
-      dfs(startNode, dfsFactory(), callback);
-    },
-
-    dfsPath: function(startNode, callback) {
-      dfs(startNode, dfsPathFactory(), callback);
-    },
-
-    dfsDepth: function(startNode, callback) {
-      dfs(startNode, dfsDepthFactory(), callback);
+  function bfsOrder(node, options) {
+    var result = [],
+        hasLoop = false;
+    bfs(node, bfsFactory(), function(node) {
+      result.push(node);
+    }, function() {
+      if (options && options.noLoop) {
+        hasLoop = true;
+      }
+    });
+    if (hasLoop) {
+      return null;
+    } else {
+      return result;      
     }
+  }
+
+  function fullBfsOrder(options) {
+    var visited = [],
+        result = [],
+        startNode = 0;
+
+    while(startNode !== nodesNum) {
+      if (!visited[startNode]) {
+        var nextBfs = bfsOrder(startNode, options);
+        if (nextBfs == null) {
+          return null;
+        }
+        for (var i = 0 ; i < nextBfs.length ; ++i) {
+          var nextNode = nextBfs[i];
+          visited[nextNode] = true;
+          result.push(nextNode);
+        }
+      }
+      startNode++;
+    }
+
+    return result;
+  }
+
+  return {
+    fullBfsOrder: fullBfsOrder,
+    bfsOrder: bfsOrder,
+
+    bfs: function(startNode, callback) {
+      bfs(startNode, bfsFactory(), callback);
+    },
+
+    bfsPath: function(startNode, callback) {
+      bfs(startNode, bfsPathFactory(), callback);
+    },
+
+    bfsDepth: function(startNode, callback) {
+      bfs(startNode, bfsDepthFactory(), callback);
+    },
+
+    nodesNum: nodesNum
   }
 }
 
