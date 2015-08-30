@@ -15,6 +15,32 @@ function binTree(initRoot) {
   }
 
   return {
+    path: function(node) {
+      var queue = [[root]],
+          newPath;
+
+      while (queue.length !== 0) {
+        var nextPath = queue.shift(),
+            lastNode = nextPath[nextPath.length - 1];
+
+        if (lastNode === node) {
+          return nextPath;
+        }
+
+        if (lastNode.left) {
+          newPath = nextPath.slice();
+          newPath.push(lastNode.left);
+          queue.push(newPath);
+        }
+
+        if (lastNode.right) {
+          newPath = nextPath.slice();
+          newPath.push(lastNode.right);
+          queue.push(newPath);          
+        }
+      }
+    },
+
     setRoot: function(newRoot) {
       root = newRoot;
     },
