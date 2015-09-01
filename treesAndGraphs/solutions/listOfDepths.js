@@ -4,7 +4,7 @@ function listOfDepths(graph) {
 
   var lists = [];
 
-  graph.dfsDepth(0, function(node) {
+  graph.bfsDepth(0, function(node) {
     if (!lists[node.depth]) {
       lists[node.depth] = linkedList();
     }
