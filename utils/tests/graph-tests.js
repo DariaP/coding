@@ -19,11 +19,10 @@ test('bfs', function(t) {
   var g = graph([[1,2],[3],[0],[]], 4),
   	  order = [];
 
-  g.bfs(0, function(node) {
+  g.bfs(function(node) {
   	order.push(node);
   })
 
   t.deepEquals(order,[0,1,2,3]);
   t.end();
 });
-

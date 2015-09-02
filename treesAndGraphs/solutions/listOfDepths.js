@@ -4,12 +4,14 @@ function listOfDepths(graph) {
 
   var lists = [];
 
-  graph.bfsDepth(0, function(node) {
+  graph.bfs(function(node) {
     if (!lists[node.depth]) {
       lists[node.depth] = linkedList();
     }
 
     lists[node.depth].add(node.node);
+  }, {
+  	callbackData: 'depth'
   });
 
   return lists;

@@ -1,36 +1,62 @@
 function graph(adjList, nodesNum) {
 
-  function bfs(startNode, factory, callback, loopCallback) {
-      if(nodesNum === 0) {
-        return;
-      }
+  function partBfs(startNode, factory, callback, loopCallback) {
 
-      var visited = [],
-          queue = [factory.initElement(startNode)];
+    if(nodesNum === 0) {
+      return;
+    }
 
-      while (queue.length !== 0) {
-        var nextElement = queue.shift(),
-            nextNode = factory.getNode(nextElement);
+    var visited = [],
+        queue = [factory.initElement(startNode)];          
 
-        if(visited[nextNode]) {
-          if(loopCallback) {
-            var mustReturn = loopCallback();
-            if (mustReturn) {
-              return;
-            }
-          } else {
-            continue;            
+    while (queue.length !== 0) {
+      var nextElement = queue.shift(),
+          nextNode = factory.getNode(nextElement);
+
+      if(visited[nextNode]) {
+        if(loopCallback) {   
+          var mustReturn = loopCallback(nextElement, nextNode);
+          if (mustReturn) {
+            return;
           }
         } else {
-          visited[nextNode] = true;
-
-          if (adjList[nextNode]) {
-            var newElements = factory.makeNextElement(nextElement);
-            queue = queue.concat(newElements);
-          }
-          callback(nextElement);
+          continue;            
         }
+      } else {
+        visited[nextNode] = true;
+
+        if (adjList[nextNode]) {
+          var newElements = factory.makeNextElement(nextElement);
+          queue = queue.concat(newElements);
+        }
+        callback(nextElement);
       }
+    } 
+
+  }
+
+  function bfs(startNode, factory, callback, loopCallback) {
+
+    if(nodesNum === 0) {
+      return;
+    }
+
+    var visited = [],
+        queue = [],
+        startNode = 0; 
+
+    while(startNode !== nodesNum) {
+
+      if (!visited[startNode]) {
+        partBfs (startNode, factory, function (nextElement) {
+          callback(nextElement);
+          visited[factory.getNode(nextElement)] = true;
+        }, 
+        loopCallback);
+      }
+
+      startNode++;
+    }
   }
 
   function bfsFactory() {
@@ -88,19 +114,35 @@ function graph(adjList, nodesNum) {
     }
   }
 
-  function bfsOrder(node, options) {
+  function order(node, bfsFunc, options) {
+    var result = [];
+
+    bfsFunc(node, bfsFactory(), function(node) {
+      result.push(node);
+    });
+
+    return result;
+  }
+
+  function noLoopOrder(node, bfsFunc, options) {
     var result = [],
         hasLoop = false;
-    bfs(node, bfsFactory(), function(node) {
-      result.push(node);
-    }, function() {
-      if (options && options.noLoop) {
-        hasLoop = true;
-        return true;
-      } else {
-        return false;
+
+    bfsFunc(node, bfsPathFactory(), 
+      function(path) {
+        var node = path[path.length - 1];
+        result.push(node);
+      }, 
+      function(path, node) {
+        if (path.indexOf(node) === path.length - 1) {
+          return false;
+        } else {
+          hasLoop = true;
+          return true;          
+        }
       }
-    });
+    );
+
     if (hasLoop) {
       return null;
     } else {
@@ -108,43 +150,43 @@ function graph(adjList, nodesNum) {
     }
   }
 
-  function fullBfsOrder(options) {
-    var visited = [],
-        result = [],
-        startNode = 0;
-
-    while(startNode !== nodesNum) {
-      if (!visited[startNode]) {
-        var nextBfs = bfsOrder(startNode, options);
-        if (nextBfs == null) {
-          return null;
-        }
-        for (var i = 0 ; i < nextBfs.length ; ++i) {
-          var nextNode = nextBfs[i];
-          visited[nextNode] = true;
-          result.push(nextNode);
-        }
-      }
-      startNode++;
-    }
-
-    return result;
-  }
-
   return {
-    fullBfsOrder: fullBfsOrder,
-    bfsOrder: bfsOrder,
-
-    bfs: function(startNode, callback) {
-      bfs(startNode, bfsFactory(), callback);
+    bfsOrder: function(node, options) {
+      if (options && options.noLoop) {
+        return noLoopOrder(node, partBfs);          
+      } else {
+        return order(node, partBfs);          
+      }
     },
 
-    bfsPath: function(startNode, callback) {
-      bfs(startNode, bfsPathFactory(), callback);
+    fullBfsOrder: function(options) {
+      if (options && options.noLoop) {
+        return noLoopOrder(0, bfs);
+      } else {
+        return order(0, bfs);         
+      }  
     },
 
-    bfsDepth: function(startNode, callback) {
-      bfs(startNode, bfsDepthFactory(), callback);
+    bfs: function(callback, options) {
+      var factory = null;
+      if (options && options.callbackData === 'path') {
+        factory = bfsPathFactory();
+      } else if (options && options.callbackData === 'depth') {
+        factory = bfsDepthFactory();
+      } else {
+        factory = bfsFactory();
+      }
+
+      var func = null;
+      if (options && options.full === true) {
+        func = bfs;
+      } else {
+        func = partBfs;
+      }
+
+      var startNode = (options && options.startNode) ? options.startNode : 0;
+
+      func(startNode, factory, callback);
     },
 
     nodesNum: nodesNum

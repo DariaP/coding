@@ -12,7 +12,7 @@ function order(graph) {
   for(var i = bfsOrder.length - 1 ; i >=0 ; --i ) {
     var startNode = bfsOrder[i];
     if (!visited[startNode]) {
-      var nextBfs = graph.bfsOrder(startNode);
+      var nextBfs = graph.bfsOrder(startNode).reverse();
       for (var j = 0 ; j < nextBfs.length ; ++j) {
         var nextNode = nextBfs[j];
         if (!visited[nextNode]) {

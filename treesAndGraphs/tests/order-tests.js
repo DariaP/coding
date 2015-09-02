@@ -17,16 +17,16 @@ test('it works when root is not the first node', function(t) {
 });
 
 test('it works with bigger graph', function(t) {
-  var g = graph([[1,2],[3,4],[],[5],[6],[8],[7],[5],[8]], 9);
+  var g = graph([[1,2],[3,4],[],[5],[6],[7],[8],[],[5]], 9);
   var result = order(g);
-  t.deepEquals(result, [8,5,7,6,4,3,1,2,0]);
+  t.deepEquals(result, [7,5,8,6,4,3,2,1,0]);
   t.end();
 });
 
 test('it works with bigger graph', function(t) {
-  var g = graph([[1,2],[3,4],[],[5],[6],[8],[7],[],[8],[6]], 9);
+  var g = graph([[1,2],[3,4],[],[5],[6],[7],[8],[6],[]], 9);
   var result = order(g);
-  t.deepEquals(result, [7,6,8,5,3,1,5,2,0]);
+  t.deepEquals(result, [8,6,7,5,4,3,2,1,0]);
   t.end();
 });
 
