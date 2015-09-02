@@ -14,20 +14,22 @@ function graph(adjList, nodesNum) {
 
         if(visited[nextNode]) {
           if(loopCallback) {
-            loopCallback();
-            return;
+            var mustReturn = loopCallback();
+            if (mustReturn) {
+              return;
+            }
           } else {
             continue;            
           }
         } else {
           visited[nextNode] = true;
-        }
 
-        if (adjList[nextNode]) {
-          var newElements = factory.makeNextElement(nextElement);
-          queue = queue.concat(newElements);
+          if (adjList[nextNode]) {
+            var newElements = factory.makeNextElement(nextElement);
+            queue = queue.concat(newElements);
+          }
+          callback(nextElement);
         }
-        callback(nextElement);
       }
   }
 
@@ -94,6 +96,9 @@ function graph(adjList, nodesNum) {
     }, function() {
       if (options && options.noLoop) {
         hasLoop = true;
+        return true;
+      } else {
+        return false;
       }
     });
     if (hasLoop) {
