@@ -64,6 +64,24 @@ function tree() {
       return newNode;
     },
 
+    find: function(value) {
+      var node = root;
+
+      while (node) {
+        if (node.value === value) {
+          return node;
+        } else {
+          if (node.value < value) {
+            node = node.right;
+          } else {
+            node = node.left;
+          }
+        }
+      }
+
+      return null;
+    },
+
     inOrderValues: function() {
       return tree.inOrderValues();
     },
