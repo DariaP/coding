@@ -199,7 +199,7 @@ test('it works when subtree is one node, which is not a leaf', function(t) {
   var tree = binTree(root),
       subtree = binTree(subtreeRoot);
 
-  t.equals(checkTree(tree, subtree),true);
+  t.equals(checkTree(tree, subtree),false);
   t.end();
 });
 

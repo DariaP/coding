@@ -10,6 +10,22 @@ function binTree(initRoot) {
     }
   }
 
+  function preOrder(node, callback) {
+    if (node) {
+      callback(node);
+      preOrder(node.left, callback);
+      preOrder(node.right, callback);
+    }
+  }
+
+  function postOrder(node, callback) {
+    if (node) {
+      postOrder(node.left, callback);
+      postOrder(node.right, callback);
+      callback(node);
+    }
+  }
+
   function max(a,b) {
     return (a > b) ? a : b;
   }
@@ -45,8 +61,20 @@ function binTree(initRoot) {
       root = newRoot;
     },
 
+    root: function() {
+      return root;
+    },
+
     inOrder: function(callback) {
       inOrder(root, callback);
+    },
+
+    preOrder: function(callback) {
+      preOrder(root, callback);
+    },
+
+    postOrder: function(callback) {
+      postOrder(root, callback);
     },
 
     inOrderValues: function() {
