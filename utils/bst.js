@@ -49,6 +49,82 @@ function tree() {
     return (a > b) ? a : b;
   }
 
+  function find(value) {
+    var node = root,
+        prevNode = null;
+
+    while (node) {
+      if (node.value === value) {
+        return {
+          node: node,
+          prevNode: prevNode
+        };
+      } else {
+        if (node.value < value) {
+          prevNode = node;
+          node = node.right;
+        } else {
+          prevNode = node;
+          node = node.left;
+        }
+      }
+    }
+
+    return {
+      node: null,
+      prevNode: null
+    };
+  }
+
+  function setChild(parent, child, newChild) {
+
+    if (!parent) {
+      root = newChild;
+      tree.setRoot(newChild);
+    } else {
+      if (parent.left === child) {
+        parent.left = newChild;
+      } else {
+        parent.right = newChild;
+      }
+    }
+  }
+
+  function removeMin(root) {
+    var node = root,
+        prevNode = null;
+
+    while (node.left) {
+      prevNode = node;
+      node = node.left;
+    }
+
+    deleteNode(prevNode, node);
+
+    return node;
+  }
+
+  function deleteNode(prevNode, node) {
+    if (node) {
+      if (!node.left && !node.right) {
+        setChild(prevNode, node, null);
+      } else if (!node.left) {
+        setChild(prevNode, node, node.right);
+      } else if (!node.right) {
+        setChild(prevNode, node, node.left);
+      } else if (!node.right.left) { 
+        // min of the right branch is the right child of the node
+        node.right.left = node.left;
+        setChild(prevNode, node, node.right);
+      } else {
+        var min = removeMin(node.right);
+        min.left = node.left;
+        min.right = node.right;
+        setChild(prevNode, node, min);
+      }
+    }
+  }
+
   return {
     add: function(value) {
       var newNode = node(value);
@@ -65,21 +141,19 @@ function tree() {
     },
 
     find: function(value) {
-      var node = root;
+      return find(value).node;
+    },
 
-      while (node) {
-        if (node.value === value) {
-          return node;
-        } else {
-          if (node.value < value) {
-            node = node.right;
-          } else {
-            node = node.left;
-          }
-        }
-      }
+    delete: function(value) {
+      var nodes = find(value),
+          node = nodes.node,
+          prevNode = nodes.prevNode;
 
-      return null;
+      deleteNode(prevNode, node);
+    },
+
+    inOrder: function(callback) {
+      tree.inOrder(callback);
     },
 
     inOrderValues: function() {

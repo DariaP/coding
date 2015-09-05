@@ -18,3 +18,96 @@ test('find', function(t) {
 
   t.end();
 });
+
+test('delete with 2 children', function(t) {
+  var tree = createTree();
+  tree.add(4);
+  tree.add(2);
+  tree.add(1);
+  tree.add(3);
+  tree.add(6);
+  tree.add(5);
+  tree.add(7);
+
+  tree.delete(4);
+  t.deepEquals(tree.inOrderValues(),[1,2,3,5,6,7]);
+
+  t.end();
+});
+
+test('delete with left child', function(t) {
+  var tree = createTree();
+  tree.add(4);
+  tree.add(2);
+  tree.add(1);
+  tree.add(6);
+  tree.add(5);
+  tree.add(7);
+
+  tree.delete(2);
+  t.deepEquals(tree.inOrderValues(),[1,4,5,6,7]);
+
+  t.end();
+});
+
+test('delete with right child', function(t) {
+  var tree = createTree();
+  tree.add(4);
+  tree.add(2);
+  tree.add(3);
+  tree.add(6);
+  tree.add(5);
+  tree.add(7);
+
+  tree.delete(2);
+  t.deepEquals(tree.inOrderValues(),[3,4,5,6,7]);
+
+  t.end();
+});
+
+test('delete leaf', function(t) {
+  var tree = createTree();
+  tree.add(4);
+  tree.add(2);
+  tree.add(3);
+  tree.add(6);
+  tree.add(5);
+  tree.add(7);
+
+  tree.delete(3);
+  t.deepEquals(tree.inOrderValues(),[2,4,5,6,7]);
+
+  t.end();
+});
+
+test('delete node, whose right child is min of right subtree', function(t) {
+  var tree = createTree();
+  tree.add(9);
+  tree.add(2);
+  tree.add(1);
+  tree.add(3);
+  tree.add(4);
+  tree.add(5);
+
+  tree.delete(2);
+  t.deepEquals(tree.inOrderValues(),[1,3,4,5,9]);
+
+  t.end();
+});
+
+test('delete root of a long branch', function(t) {
+  var tree = createTree();
+  tree.add(9);
+  tree.add(11);
+  tree.add(3);
+  tree.add(2);
+  tree.add(4);
+  tree.add(1);
+  tree.add(7);
+  tree.add(8);
+
+  tree.delete(3);
+  t.deepEquals(tree.inOrderValues(),[1,2,4,7,8,9,11]);
+
+  t.end();
+});
