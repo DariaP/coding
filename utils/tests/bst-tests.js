@@ -111,3 +111,27 @@ test('delete root of a long branch', function(t) {
 
   t.end();
 });
+
+test('random', function(t) {
+  var tree = createTree();
+  tree.add(2);
+  tree.add(1);
+  tree.add(0);
+  tree.add(4);
+  tree.add(3);
+  tree.add(5);
+
+  var result = [0,0,0,0,0,0];
+
+  for (var i = 0 ; i < 6000 ; ++i) {
+    var value = tree.random();
+    result[value]++;
+  }
+
+  for (i = 0 ; i < result.length ; ++i) {
+    t.equals(Math.abs(1000 - result[i]) < 50, true);
+  }
+
+  t.end();
+});
+

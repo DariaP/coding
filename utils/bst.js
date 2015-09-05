@@ -1,9 +1,12 @@
-var binTree = require('./binTree.js')
+var binTree = require('./binTree.js'),
+    gen = require('random-seed');
 
 function tree() {
   var tree = binTree(),
       root = null,
-      heigth = 0;
+      heigth = 0,
+      size = 0;
+      random = null;
 
   function insert(node) {
     var parentNode = root,
@@ -122,6 +125,8 @@ function tree() {
         min.right = node.right;
         setChild(prevNode, node, min);
       }
+
+      size--;
     }
   }
 
@@ -136,6 +141,8 @@ function tree() {
       } else {
         insert(newNode);
       }
+
+      size++;
 
       return newNode;
     },
@@ -178,6 +185,25 @@ function tree() {
       }
 
       return isBalanced(root);
+    },
+
+    random: function() {
+      if (!random) { 
+        var seed = (new Date()).getTime().toString();
+        random = gen.create(seed);
+      }
+
+      var num = random(size),
+          result = null;
+
+      tree.inOrder(function(node) {
+        if (num === 0) {
+          result = node.value;
+        }
+        num--;
+      })
+
+      return result;
     }
   }
 }
