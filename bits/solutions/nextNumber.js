@@ -14,6 +14,22 @@ function nextLargest(num) {
 	return result;
 }
 
+function nextSmallest(num) {
+
+	if (0 === num || 1 === num) {
+		return null;
+	}
+
+	var result = num,
+		index = find10Set(num);
+
+	result = set0(result, index);
+	result = set1(result, index - 1);
+	result = move1sToEnd(result, (index - 1));
+
+	return result;
+}
+
 function find01Set(num) {
 	var resultIdx = 1,
 		foundSet = false;
@@ -21,6 +37,22 @@ function find01Set(num) {
 	while (!foundSet) {
 		if (0 === bitAt(num, resultIdx) &&
 			1 === bitAt(num, resultIdx - 1)) {
+			foundSet = true;
+		} else {
+			resultIdx++;
+		}
+	}
+
+	return resultIdx;
+}
+
+function find10Set(num) {
+	var resultIdx = 1,
+		foundSet = false;
+
+	while (!foundSet) {
+		if (1 === bitAt(num, resultIdx) &&
+			0 === bitAt(num, resultIdx - 1)) {
 			foundSet = true;
 		} else {
 			resultIdx++;
@@ -51,9 +83,6 @@ function count1s(num, endIdx) {
 		}
 	}
 	return result;
-}
-
-function nextSmallest(num) {
 }
 
 function bitAt(num, pos) {
