@@ -99,9 +99,9 @@ class Deck {
 			return size - nextCardIdx;
 		}
 
-		TCard *getCard() {
+		TCard getCard() {
 			if (nextCardIdx < size) {
-				return &cards.at(nextCardIdx++);
+				return cards.at(nextCardIdx++);
 			} else {
 				return NULL;
 			}
