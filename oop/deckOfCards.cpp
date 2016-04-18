@@ -5,23 +5,12 @@
 
 using namespace std;
 
-
 enum CardSuit {
 	HEARTS,
 	DIAMONDS,
 	CLUBS,
 	SPADES
 };
-
-vector<CardSuit> allSuits() {
-	vector<CardSuit> _suits;
-		_suits.push_back(HEARTS);
-		_suits.push_back(DIAMONDS);
-		_suits.push_back(CLUBS);
-		_suits.push_back(SPADES);			
-	
-	return _suits;
-}
 
 enum CardFace {
 	ACE = 1,
@@ -39,23 +28,34 @@ enum CardFace {
 	RANK2 = 2
 };
 
-	vector<CardFace> allFaces() {
-	vector<CardFace> _faces;
-			_faces.push_back(ACE);
-			_faces.push_back(KING);
-			_faces.push_back(QUEEN);
-			_faces.push_back(JACK);
-			_faces.push_back(RANK10);
-			_faces.push_back(RANK9);
-			_faces.push_back(RANK8);
-			_faces.push_back(RANK7);
-			_faces.push_back(RANK6);
-			_faces.push_back(RANK5);
-			_faces.push_back(RANK4);
-			_faces.push_back(RANK3);
-			_faces.push_back(RANK2);			
-		return _faces;
-	}
+class CardData {
+public:
+	static const unique_ptr<vector<CardSuit>> suits;
+	static const unique_ptr<vector<CardFace>> faces;
+};
+
+const unique_ptr<vector<CardSuit>> CardData::suits (new vector<CardSuit>({
+	HEARTS, 
+	DIAMONDS,
+	CLUBS,
+	SPADES
+}));
+
+const unique_ptr<vector<CardFace>> CardData::faces (new vector<CardFace>({
+	ACE,
+	KING,
+	QUEEN,
+	JACK,
+	RANK10,
+	RANK9,
+	RANK8,
+	RANK7,
+	RANK6,
+	RANK5,
+	RANK4,
+	RANK3,
+	RANK2
+}));
 
 
 class Card {
@@ -78,12 +78,12 @@ class Deck {
 	public:
 		static const int size = 52;
 		Deck() {
-			vector<CardFace> faces = allFaces();
-			vector<CardSuit> suits = allSuits();
+			vector<CardFace> *faces = CardData::faces.get();
+			vector<CardSuit> *suits = CardData::suits.get();
 
-			for (int i = 0 ; i < faces.size() ; ++i) {
-				for (int j = 0 ; j < suits.size() ; ++j) {
-					cards.push_back(TCard(suits.at(j), faces.at(i)));
+			for (int i = 0 ; i < faces->size() ; ++i) {
+				for (int j = 0 ; j < suits->size() ; ++j) {
+					cards.push_back(TCard(suits->at(j), faces->at(i)));
 				}
 			} 
 		}
