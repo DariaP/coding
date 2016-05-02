@@ -1,5 +1,5 @@
-CC      = g++
-CFLAGS  = -g -std=c++11
+CC      = clang++
+CFLAGS  = -std=c++11 -stdlib=libc++
 RM      = rm -rf
 
 SRC=$(wildcard *.cpp)
