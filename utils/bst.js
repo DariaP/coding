@@ -48,6 +48,15 @@ function tree() {
     }
   }
 
+  function subtreeSize(node) {
+    if (!node) {
+      return 0;
+    } else {
+      var temp = subtreeSize(node.left) + subtreeSize(node.right);
+      return 1 + temp;
+    }
+  }
+
   function max(a,b) {
     return (a > b) ? a : b;
   }
@@ -204,7 +213,13 @@ function tree() {
       })
 
       return result;
-    }
+    },
+
+    getRoot: function() {
+      return root;
+    },
+
+    subtreeSize: subtreeSize
   }
 }
 
