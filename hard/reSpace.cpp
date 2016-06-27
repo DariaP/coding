@@ -6,24 +6,24 @@
 #define BOOST_TEST_DYN_LINK
 #include <boost/test/unit_test.hpp>
 
-class Phrase {
+class Spacing {
 public:
 	std::vector<std::string> words;
 	int charsNotInDictionary;
-	Phrase() {
+	Spacing() {
 		charsNotInDictionary = 0;
 	}
-	Phrase(int initCharsNotInDictionary) {
+	Spacing(int initCharsNotInDictionary) {
 		charsNotInDictionary = initCharsNotInDictionary;
 	}
-	Phrase(std::string initWord, bool isInDictionary) {
+	Spacing(std::string initWord, bool isInDictionary) {
 		words.push_back(initWord);
 		charsNotInDictionary = isInDictionary ? 0 : initWord.length();
 	}
-	bool betterThan(const Phrase &another) {
+	bool betterThan(const Spacing &another) {
 		return charsNotInDictionary < another.charsNotInDictionary;
 	}
-	void append(const Phrase &another) {
+	void append(const Spacing &another) {
 		charsNotInDictionary += another.charsNotInDictionary;
 		words.insert(words.end(), another.words.begin(), another.words.end());
 	}
@@ -33,33 +33,26 @@ bool wordInDictionary(std::string word, std::unordered_set<std::string> dictiona
 	return dictionary.find(word) != dictionary.end();
 }
 
-Phrase reSpaceFrom(
+Spacing reSpaceFrom(
 	std::string phrase,
 	int phraseStart, 
+	Spacing *partResults,
 	std::unordered_set<std::string> dictionary) 
 {
 
 	if (phraseStart == phrase.length()) {
-		Phrase empty;
+		Spacing empty;
 		return empty;
 	}
 
-	Phrase result(phrase.length() + 1);
+	Spacing result(phrase.length() + 1);
 
 	for (int wordEnd = phraseStart ; wordEnd < phrase.length() ; ++wordEnd) {
+
 		int wordLength = wordEnd - phraseStart + 1;
 		std::string word = phrase.substr(phraseStart, wordLength);
-		if (phraseStart == 5)
-			std::cout << phraseStart << " " << word << " " << wordInDictionary(word, dictionary)<< std::endl;
-		
-		Phrase nextPossibleSpacing(word, wordInDictionary(word, dictionary));
-		if (phraseStart == 5)
-			std::cout << nextPossibleSpacing.charsNotInDictionary << std::endl;
-
-		nextPossibleSpacing.append(reSpaceFrom(phrase, wordEnd + 1, dictionary));
-
-		if (phraseStart == 5)
-			std::cout << nextPossibleSpacing.charsNotInDictionary << std::endl;
+		Spacing nextPossibleSpacing(word, wordInDictionary(word, dictionary));
+		nextPossibleSpacing.append(partResults[wordEnd + 1]);
 
 		if (nextPossibleSpacing.betterThan(result)) {
 			result = nextPossibleSpacing;
@@ -73,8 +66,13 @@ std::vector<std::string> reSpace(
 	std::string phrase, 
 	std::unordered_set<std::string> dictionary) 
 {
-	Phrase result = reSpaceFrom(phrase, 0, dictionary);
-	return result.words;
+	Spacing *partResults = new Spacing[phrase.length() + 1];
+
+	for (int phraseStart = phrase.length() - 1 ; phraseStart >= 0 ; --phraseStart) {
+		partResults[phraseStart] = reSpaceFrom(phrase, phraseStart, partResults, dictionary);
+	}
+
+	return partResults[0].words;
 }
 
 #define CHECK_SPACING(phrase, dictionaryArray, expectedSpacingArray) { \
