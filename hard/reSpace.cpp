@@ -8,29 +8,35 @@
 
 class Spacing {
 public:
-	std::vector<std::string> words;
+	int spaceIdx;
 	int charsNotInDictionary;
-	Spacing() {
-		charsNotInDictionary = 0;
-	}
-	Spacing(int initCharsNotInDictionary) {
+
+	Spacing(int initCharsNotInDictionary = 0, int initSpaceIdx = -1) {
 		charsNotInDictionary = initCharsNotInDictionary;
+		spaceIdx = initSpaceIdx;
 	}
-	Spacing(std::string initWord, bool isInDictionary) {
-		words.push_back(initWord);
-		charsNotInDictionary = isInDictionary ? 0 : initWord.length();
-	}
+
 	bool betterThan(const Spacing &another) {
 		return charsNotInDictionary < another.charsNotInDictionary;
 	}
 	void append(const Spacing &another) {
 		charsNotInDictionary += another.charsNotInDictionary;
-		words.insert(words.end(), another.words.begin(), another.words.end());
 	}
 };
 
 bool wordInDictionary(std::string word, std::unordered_set<std::string> dictionary) {
 	return dictionary.find(word) != dictionary.end();
+}
+
+Spacing insertSpaceAfterWord(std::string phrase, int wordStart, int wordEnd, 
+	std::unordered_set<std::string> dictionary) 
+{
+	int wordLength = wordEnd - wordStart + 1;
+	std::string word = phrase.substr(wordStart, wordLength);
+	int charsNotInDictionary = wordInDictionary(word, dictionary) ? 0 : wordLength;
+
+	Spacing resultSpacing(charsNotInDictionary, wordEnd);
+	return resultSpacing;
 }
 
 Spacing reSpaceFrom(
@@ -39,24 +45,33 @@ Spacing reSpaceFrom(
 	Spacing *partResults,
 	std::unordered_set<std::string> dictionary) 
 {
-
-	if (phraseStart == phrase.length()) {
-		Spacing empty;
-		return empty;
-	}
-
 	Spacing result(phrase.length() + 1);
 
 	for (int wordEnd = phraseStart ; wordEnd < phrase.length() ; ++wordEnd) {
 
-		int wordLength = wordEnd - phraseStart + 1;
-		std::string word = phrase.substr(phraseStart, wordLength);
-		Spacing nextPossibleSpacing(word, wordInDictionary(word, dictionary));
+		Spacing nextPossibleSpacing = insertSpaceAfterWord(phrase, phraseStart, wordEnd, dictionary);
+
 		nextPossibleSpacing.append(partResults[wordEnd + 1]);
 
 		if (nextPossibleSpacing.betterThan(result)) {
 			result = nextPossibleSpacing;
 		}
+
+	}
+
+	return result;
+}
+
+std::vector<std::string> buildSpacedPhrase(std::string phrase, Spacing *partResults) {
+	std::vector<std::string> result;
+
+	int prevSpaceIdx = 0,
+		nextSpaceIdx;
+
+	while(nextSpaceIdx != phrase.length() - 1) {
+		nextSpaceIdx = partResults[prevSpaceIdx].spaceIdx;
+		result.push_back(phrase.substr(prevSpaceIdx, nextSpaceIdx - prevSpaceIdx + 1));
+		prevSpaceIdx = nextSpaceIdx + 1;
 	}
 
 	return result;
@@ -72,7 +87,7 @@ std::vector<std::string> reSpace(
 		partResults[phraseStart] = reSpaceFrom(phrase, phraseStart, partResults, dictionary);
 	}
 
-	return partResults[0].words;
+	return buildSpacedPhrase(phrase, partResults);
 }
 
 #define CHECK_SPACING(phrase, dictionaryArray, expectedSpacingArray) { \
