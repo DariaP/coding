@@ -160,6 +160,75 @@ computeSimilarities(std::unordered_map<DocId, Document> docs) {
 #define ARRAY_ARG_PROTECT(...) __VA_ARGS__
 
 BOOST_AUTO_TEST_CASE( sparse_similarity_tests ) {
+
+	CHECK_SPARSE_SIMILARITY(
+    ARRAY_ARG_PROTECT({10, 1}),
+    ARRAY_ARG_PROTECT({
+      {1, 2},
+      {4, 5}
+    }), {}
+  );
+
+	CHECK_SPARSE_SIMILARITY(
+    ARRAY_ARG_PROTECT({10, 1}),
+    ARRAY_ARG_PROTECT({
+      {1},
+      {4}
+    }), {}
+  );
+
+	CHECK_SPARSE_SIMILARITY(
+    ARRAY_ARG_PROTECT({10}),
+    ARRAY_ARG_PROTECT({
+      {1, 2}
+    }), {}
+  );
+
+	CHECK_SPARSE_SIMILARITY(
+    ARRAY_ARG_PROTECT({10, 1}),
+    ARRAY_ARG_PROTECT({
+      {1},
+      {1}
+    }),
+    ARRAY_ARG_PROTECT({
+      {{10, 1}, 1.0}
+    })
+  );
+
+	CHECK_SPARSE_SIMILARITY(
+    ARRAY_ARG_PROTECT({10, 1}),
+    ARRAY_ARG_PROTECT({
+      {1, 2},
+      {2, 3}
+    }),
+    ARRAY_ARG_PROTECT({
+      {{10, 1}, 1.0 / 3}
+    })
+  );
+
+	CHECK_SPARSE_SIMILARITY(
+    ARRAY_ARG_PROTECT({10, 1}),
+    ARRAY_ARG_PROTECT({
+      {1, 2},
+      {2, 1}
+    }),
+    ARRAY_ARG_PROTECT({
+      {{10, 1}, 1.0}
+    })
+  );
+
+	CHECK_SPARSE_SIMILARITY(
+    ARRAY_ARG_PROTECT({10, 1, 12}),
+    ARRAY_ARG_PROTECT({
+      {1, 2, 3},
+      {2, 1},
+			{}
+    }),
+    ARRAY_ARG_PROTECT({
+      {{10, 1}, 2.0 / 3.0}
+    })
+  );
+
   CHECK_SPARSE_SIMILARITY(
     ARRAY_ARG_PROTECT({10, 1, 4, 15}),
     ARRAY_ARG_PROTECT({
