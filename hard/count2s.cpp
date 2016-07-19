@@ -19,14 +19,12 @@ int count(int n) {
 	int ndigits = countDigits(n),
 		n2s = 0,
 		pow10 = 1;
-//		std::cout << "start" << std::endl;
 
 	for (int i = 0 ; i < ndigits ; ++i) {
 
 		n2s += pow10 * (n / (pow10 * 10));
 
 		int remainder = n % (pow10 * 10);
-//std::cout << remainder << " " << pow10 << std:: endl;
 		if (remainder / pow10 > 2) {
 			n2s += pow10;
 		} else if (remainder / pow10 == 2) {
@@ -34,7 +32,6 @@ int count(int n) {
 		}
 
 		pow10 *= 10;
-//		std::cout << n2s << std::endl;
 	}
 
 	return n2s;
